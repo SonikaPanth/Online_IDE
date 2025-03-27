@@ -34,16 +34,8 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ error: err.message }); // ✅ Use JSON response instead of res.render()
 });
 
-// Start Server only after DB connection
-const PORT = process.env.PORT || 5000;
-
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
-}).catch((err) => {
-  console.error("❌ Failed to start the server:", err);
-});
+// ✅ Export the Express app (DO NOT START SERVER HERE)
+module.exports = app;
